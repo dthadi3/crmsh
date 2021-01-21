@@ -1,6 +1,6 @@
 sudo: required
 language: python
-arch: ppc64le
+#arch: ppc64le
 services:
   - docker
 
