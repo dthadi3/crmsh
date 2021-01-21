@@ -1,0 +1,18 @@
+sudo: required
+language: python
+arch: ppc64le
+services:
+  - docker
+
+before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+before_install:
+        - docker pull $IMAGE
+script:
+        - docker run -t -v "$(pwd):/app" $IMAGE /bin/sh -c "cd /app; ./test/run-in-travis.sh"
+after_failure:
+        - sudo cat $TRAVIS_BUILD_DIR/crmtestout/regression.out $TRAVIS_BUILD_DIR/crmtestout/crm.*
+after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
